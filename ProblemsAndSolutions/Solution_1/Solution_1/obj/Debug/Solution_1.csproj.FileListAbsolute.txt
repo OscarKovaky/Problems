@@ -1,0 +1,7 @@
+D:\Documentos\ASP.NET LAB\Problems\ProblemsAndSolutions\Solution_1\Solution_1\bin\Debug\Solution_1.exe.config
+D:\Documentos\ASP.NET LAB\Problems\ProblemsAndSolutions\Solution_1\Solution_1\bin\Debug\Solution_1.exe
+D:\Documentos\ASP.NET LAB\Problems\ProblemsAndSolutions\Solution_1\Solution_1\bin\Debug\Solution_1.pdb
+D:\Documentos\ASP.NET LAB\Problems\ProblemsAndSolutions\Solution_1\Solution_1\obj\Debug\Solution_1.csprojAssemblyReference.cache
+D:\Documentos\ASP.NET LAB\Problems\ProblemsAndSolutions\Solution_1\Solution_1\obj\Debug\Solution_1.csproj.CoreCompileInputs.cache
+D:\Documentos\ASP.NET LAB\Problems\ProblemsAndSolutions\Solution_1\Solution_1\obj\Debug\Solution_1.exe
+D:\Documentos\ASP.NET LAB\Problems\ProblemsAndSolutions\Solution_1\Solution_1\obj\Debug\Solution_1.pdb
