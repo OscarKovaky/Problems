@@ -19,109 +19,152 @@ namespace WebApplicationCars.Models
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(string currentFilter,string SearchString,int? pageNumber)
         {
-            return View(await _context.Cars.ToListAsync());
-        }
 
-        // GET: Cars/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (car == null)
-            {
-                return NotFound();
-            }
+            
+                ViewData["CurrentFilter"] = SearchString;
+               
 
-            return View(car);
-        }
 
-        // GET: Cars/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Cars/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Placa,Marca,NumeroSerie,Modelo")] Car car)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(car);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(car);
-        }
-
-        // GET: Cars/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var car = await _context.Cars.FindAsync(id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-            return View(car);
-        }
-
-        // POST: Cars/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Placa,Marca,NumeroSerie,Modelo")] Car car)
-        {
-            if (id != car.ID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+            if (SearchString != null)
                 {
-                    _context.Update(car);
+                    pageNumber = 1;
+                }
+                else
+                {
+                    SearchString = currentFilter;
+                }
+
+
+
+                var cars = from m in _context.Cars select m;
+
+
+                if (!string.IsNullOrEmpty(SearchString))
+                {
+                    cars = cars.Where(s => s.Marca.Contains(SearchString)
+                    || s.Placa.Contains(SearchString)
+                    );
+                }
+
+                
+
+               /* var carsPlacaVM = new CarMarcaViewModel
+                {
+                    Marca = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                    Cars = await cars.ToListAsync()
+                };
+               */
+
+
+
+
+
+                int pageSize = 10;
+                return View( await PaginatedList<Car>.Create(cars.AsNoTracking(), pageNumber ?? 1, pageSize));
+            }
+
+            // GET: Cars/Details/5
+            public async Task<IActionResult> Details(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var car = await _context.Cars
+                    .FirstOrDefaultAsync(m => m.ID == id);
+                if (car == null)
+                {
+                    return NotFound();
+                }
+
+                return View(car);
+            }
+
+            // GET: Cars/Create
+            public IActionResult Create()
+            {
+                return View();
+            }
+
+            // POST: Cars/Create
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create([Bind("ID,Placa,Marca,NumeroSerie,Modelo")] Car car)
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(car);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CarExists(car.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(car);
             }
-            return View(car);
-        }
 
-      
+            // GET: Cars/Edit/5
+            public async Task<IActionResult> Edit(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-        
+                var car = await _context.Cars.FindAsync(id);
+                if (car == null)
+                {
+                    return NotFound();
+                }
+                return View(car);
+            }
 
-        private bool CarExists(int id)
-        {
-            return _context.Cars.Any(e => e.ID == id);
+            // POST: Cars/Edit/5
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(int id, [Bind("ID,Placa,Marca,NumeroSerie,Modelo")] Car car)
+            {
+                if (id != car.ID)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(car);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!CarExists(car.ID))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(car);
+            }
+
+
+
+
+
+            private bool CarExists(int id)
+            {
+                return _context.Cars.Any(e => e.ID == id);
+            }
         }
     }
-}

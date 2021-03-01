@@ -31,7 +31,7 @@ namespace WebApplicationCars
 
             services.AddDbContext<MvcCarContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("MvcCarContext")));
-
+            
 
         }
 
