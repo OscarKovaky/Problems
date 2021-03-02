@@ -79,7 +79,9 @@ namespace Solution_1
         static void Main(string[] args)
         {
             Program program = new Program();
-            program.Prueba();
+            program.Cargar();
+            program.Ordenar();
+            program.Imprimir();
 
 
 
